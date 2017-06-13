@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>学生管理系统 - 添加学生</title>
+    <!--<link href="https://cdn.bootcss.com/font-awesome/4.6.1/css/font-awesome.css" rel="stylesheet">
+    <link href="https://cdn.bootcss.com/foundation/6.4.0-rc1/css/foundation.min.css" rel="stylesheet">-->
+    <link href="https://cdn.bootcss.com/foundation-datepicker/1.5.0/css/foundation-datepicker.min.css" rel="stylesheet">
+    <style type="text/css">
+    	label.error{
+    		color: red;
+    	}
+    </style>
+</head>
+<body>
+    <form action="/submit" id="myform" class="form">
+    	<input id="demo-2" placeholder="请输入当前时间" />
+        <input value="{{data.name}}" type="text" name="name" placeholder="请输入姓名" /><br>
+        <input type="radio" name="isMale" id="male" value="true" {{data.isMale==true?'checked':''}} />
+        <label for="male">男</label>
+        <input type="radio" name="isMale" id="female" value="false" {{data.isMale==false?'checked':''}} />
+        <label for="female">女</label><br>
+        <select name="age" id="age">
+            <option value="18" {{data.age==18?"seclected":''}}>18</option>
+            <option value="19" {{data.age==19?"seclected":''}}>19</option>
+            <option value="20" {{data.age==20?"seclected":''}}>20</option>
+            <option value="21" {{data.age==21?"seclected":''}}>21</option>
+            <option value="22" {{data.age==22?"seclected":''}}>22</option>
+            <option value="23" {{data.age==23?"seclected":''}}>23</option>
+            <option value="24" {{data.age==24?"seclected":''}}>24</option>
+        </select>
+        <br>
+        <input value="{{data.phone}}" type="tel" name="phone" placeholder="请输入手机号码"  /><br>
+        <input value="{{data.email}}" type="email" name="email" placeholder="请输入电子邮件"  /><br>
+        <textarea name="description" id="" cols="100" 
+        rows="10" placeholder="请填写学生的其它信息">{{data.description}}</textarea>
+        <br>
+        <input type="submit" value="提交" />
+    </form>
+    <script src="http://static.runoob.com/assets/jquery-validation-1.14.0/lib/jquery.js"></script>
+	<script src="http://static.runoob.com/assets/jquery-validation-1.14.0/dist/jquery.validate.min.js"></script>
+	<script src="http://static.runoob.com/assets/jquery-validation-1.14.0/dist/localization/messages_zh.js"></script>
+	<script src="https://cdn.bootcss.com/foundation-datepicker/1.5.0/js/foundation-datepicker.min.js"></script>
+	<script src="https://cdn.bootcss.com/foundation-datepicker/1.5.0/js/locales/foundation-datepicker.zh-CN.js"></script>
+	<script type="text/javascript">
+		
+		$('#demo-2').fdatepicker({
+		    format: 'yyyy-mm-dd',
+		});
+		
+		
+		// 在键盘按下并释放及提交后验证提交表单
+		$("#myform").validate({
+			submitHandler: function(form){
+				$.ajax({
+					url:"/submit"+{{data.id}},
+					data: $("#myform").serialize(),
+					type:"post",
+					dataType: "json",
+					success:function(res){
+						alert(res.msg);
+						if(res.status==200){
+							location.href="/home"
+						}
+					},
+					error: function(err){
+						console.dir(err)
+					}
+				})
+			},
+		    rules: {
+		      name: "required",
+		      phone: "required",
+		      email: {
+		        required: true,
+		        email: true
+		      },
+		      description: {
+		        required: true,
+		        minlength: 2,
+		      },
+		    }
+		});
+		
+//		$(".form").submit((ev)=>{
+//			ev.preventDefault();
+			
+//			$("#myform").validate({
+//				debug: true,
+//			    rules: {
+//			      name: "required",
+//			      phone: "required",
+//			      email: {
+//			        required: true,
+//			        email: true
+//			      },
+//			      description: {
+//			        required: true,
+//			        minlength: 2,
+//			      },
+//			    }
+//			});
+			
+//			$.ajax({
+//				url:"/submit"+{{data.id}},
+//				data: $("#myform").serialize(),
+//				type:"post",
+//				dataType: "json",
+//				success:function(res){
+//					alert(res.msg);
+//					if(res.status==200){
+//						location.href="/home"
+//					}
+//				},
+//				error: function(err){
+//					console.dir(err)
+//				}
+//			})
+//		})
+		
+	</script>
+</body>
+</html>
